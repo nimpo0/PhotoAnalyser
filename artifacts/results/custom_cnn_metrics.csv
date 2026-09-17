@@ -1,0 +1,2 @@
+﻿model,training_strategy,mae,rmse,plcc,srcc,best_epoch,validation_loss,training_time_seconds,total_parameters,trainable_parameters
+Custom CNN,Custom CNN,8.884273,11.303269,0.8468616,0.8414698692707551,7,0.012793875088294347,1382.9530889999987,423046,423046

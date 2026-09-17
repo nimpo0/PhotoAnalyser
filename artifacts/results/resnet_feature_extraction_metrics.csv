@@ -1,0 +1,2 @@
+﻿model,training_strategy,mae,rmse,plcc,srcc,best_epoch,validation_loss,training_time_seconds,total_parameters,trainable_parameters
+ResNet18,Feature Extraction,10.62403,13.34243,0.78345937,0.7803460159736597,4,0.017718411572277545,909.8586529999993,11179590,3078

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Проявка · Аналіз якості фотографій</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+
+<body>
+    <main class="page">
+
+        <header class="hero">
+            <h1>Технічний аналіз ваших кадрів</h1>
+            <p class="subtitle">
+                Проаналізуйте одну фотографію детально або завантажте до 30 кадрів,
+                щоб швидко визначити, які з них варто залишити.
+            </p>
+        </header>
+
+        <div class="mode-switch" role="tablist" aria-label="Режим аналізу">
+            <button id="single-mode-button" class="mode-button active" type="button" role="tab" aria-controls="single-mode" aria-selected="true">
+                Один кадр
+            </button>
+            <button id="batch-mode-button" class="mode-button" type="button" role="tab" aria-controls="batch-mode" aria-selected="false">
+                До 30 фото
+            </button>
+        </div>
+
+        <div id="single-mode">
+
+            <section class="upload-card">
+                <input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+
+                <button id="upload-area" class="upload-area" type="button">
+                    <span class="viewfinder-corner tl" aria-hidden="true"></span>
+                    <span class="viewfinder-corner tr" aria-hidden="true"></span>
+                    <span class="viewfinder-corner bl" aria-hidden="true"></span>
+                    <span class="viewfinder-corner br" aria-hidden="true"></span>
+                    <span class="lens-icon" aria-hidden="true"></span>
+                    <strong>Перетягніть фото сюди або натисніть, щоб вибрати</strong>
+                    <span>до 10 МБ</span>
+                </button>
+
+                <div id="preview-block" class="preview-block hidden">
+                    <img id="image-preview" src="" alt="Попередній перегляд фотографії">
+                    <div class="preview-info">
+                        <p id="file-name"></p>
+                        <button id="change-photo" class="text-button" type="button">Обрати інше фото</button>
+                    </div>
+                </div>
+
+                <button id="analyze-button" class="primary-button" type="button" disabled>
+                    Проаналізувати фото
+                </button>
+
+                <div id="loading" class="loading hidden">
+                    <span class="spinner"></span>
+                    Аналізуємо кадр…
+                </div>
+
+                <p id="error-message" class="error-message hidden"></p>
+            </section>
+
+            <section id="results" class="results hidden">
+                <div class="result-heading">
+                    <div>
+                        <h2>Оцінка кадру</h2>
+                        <p id="overall-level" class="overall-level"></p>
+                    </div>
+
+                    <div id="overall-score" class="score-gauge">
+                        <div class="score-gauge__ticks" aria-hidden="true"></div>
+                        <div class="score-gauge__ring" aria-hidden="true"></div>
+                        <div class="score-gauge__center">
+                            <strong id="overall-value">0</strong>
+                            <span class="score-gauge__unit">/ 100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="result-grid">
+                    <article class="panel">
+                        <h3>Параметри якості</h3>
+                        <p class="panel-caption">
+                            Кожен показник має значення від 0 до 100, де 100 означає найвищу якість.
+                        </p>
+                        <div id="parameter-list" class="parameter-list"></div>
+                    </article>
+
+                    <article class="panel recommendations-panel">
+                        <h3>Рекомендації</h3>
+                        <p id="recommendation-summary" class="recommendation-summary"></p>
+                        <div id="recommendation-list" class="recommendation-list"></div>
+                    </article>
+                </div>
+            </section>
+        </div>
+
+        <div id="batch-mode" class="hidden">
+            <section class="upload-card">
+                <input id="batch-photo-input" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+
+                <button id="batch-upload-area" class="upload-area" type="button">
+                    <span class="viewfinder-corner tl" aria-hidden="true"></span>
+                    <span class="viewfinder-corner tr" aria-hidden="true"></span>
+                    <span class="viewfinder-corner bl" aria-hidden="true"></span>
+                    <span class="viewfinder-corner br" aria-hidden="true"></span>
+                    <span class="lens-icon" aria-hidden="true"></span>
+                    <strong>Перетягніть сюди декілька фотографій або натисніть, щоб вибрати</strong>
+                    <span>Від 1 до 30 фото - кожне до 10 МБ</span>
+                </button>
+
+                <div id="batch-preview-block" class="batch-preview-block hidden">
+                    <div class="batch-preview-header">
+                        <p>Вибрано фотографій: <strong id="batch-count">0</strong></p>
+                        <button id="change-batch-photos" class="text-button" type="button">Обрати інші</button>
+                    </div>
+                    <div id="batch-file-list" class="batch-file-list"></div>
+                </div>
+
+                <button id="analyze-batch-button" class="primary-button" type="button" disabled>
+                    Проаналізувати вибрані фото
+                </button>
+
+                <div id="batch-loading" class="loading hidden">
+                    <span class="spinner"></span>
+                    Аналізуємо серію кадрів…
+                </div>
+
+                <p id="batch-error-message" class="error-message hidden"></p>
+            </section>
+
+            <section id="batch-results" class="results hidden">
+                <div class="result-heading">
+                    <div>
+                        <h2>Результати відбору</h2>
+                        <p class="overall-level">Кадри з найнижчою оцінкою показані першими</p>
+                    </div>
+                </div>
+
+                <div class="batch-summary">
+                    <div class="batch-summary-item">
+                        <strong id="batch-analyzed-count">0</strong>
+                        <span>проаналізовано</span>
+                    </div>
+                    <div class="batch-summary-item keep">
+                        <strong id="batch-keep-count">0</strong>
+                        <span>варто залишити</span>
+                    </div>
+                    <div class="batch-summary-item delete">
+                        <strong id="batch-delete-count">0</strong>
+                        <span>кандидатів на видалення</span>
+                    </div>
+                </div>
+
+                <article class="panel">
+                    <h3>Фотографії</h3>
+                    <p class="batch-explanation">
+                        Підсумковий бал складається з 60% загальної оцінки моделі та 40% середньої оцінки параметрів.
+                    </p>
+                    <div id="batch-result-list" class="batch-result-list"></div>
+                </article>
+            </section>
+        </div>
+
+        <footer class="footer">
+            Модель: ResNet18 Fine tuning
+        </footer>
+
+    </main>
+
+    <script src="/static/script.js"></script>
+</body>
+</html>
